@@ -1,4 +1,4 @@
-import { Db } from 'mongodb'
+import { IBuiltDoctorConfig } from './IBuiltDoctorConfig'
 
 export interface IArgument {
   name: string,
@@ -7,15 +7,16 @@ export interface IArgument {
 
 export interface IOption {
   name: string,
-  description: string
+  description: string,
+  flag?: any
 }
 
 export interface IMongoCommandHandler {
   (
+    config: IBuiltDoctorConfig,
     args: { [k: string]: any },
     options: { [k: string]: any },
-    logger: Logger,
-    mongodbConnection: Db
+    logger: Logger
   ): void;
 }
 
@@ -23,6 +24,6 @@ export interface ICommand {
   name: string,
   description: string,
   arguments?: IArgument[],
-  commands?: ICommand[],
-  handler: ActionCallback
+  options?: IOption[],
+  handler: IMongoCommandHandler
 }

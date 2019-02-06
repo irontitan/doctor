@@ -3,7 +3,6 @@ import path from 'path'
 import chalk from 'chalk'
 import entityValidator from './entity-validator'
 import mongodb from '../../data/connections/mongodb'
-import { ICommand } from "../../structures/interfaces/ICommand"
 import { IDoctorConfig } from '../../structures/interfaces/IDoctorConfig'
 
 const fail = chalk.red
@@ -17,10 +16,10 @@ async function exists (fileName: string) {
   })
 }
 
-const command: ICommand = {
+const command = {
   name: 'check',
-  description: "Diagnoses you project and tells if it's OK",
-  async handler (_args, options, logger) {
+  description: "Diagnoses you project configuration and tells if it's OK",
+  async handler (_args: { [key: string]: any }, options: { [key: string]: any }, logger: Logger) {
     const configFile = path.resolve(process.cwd(), options.file || './doctor.config.js')
 
     if (!await exists(configFile)) {
