@@ -1,0 +1,38 @@
+{
+  "name": "@nxcd/doctor",
+  "version": "1.0.0",
+  "description": "Toolm to operate @nxcd/paradox and help with controling time",
+  "bin": {
+    "doctor": "dist/cli.js"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nxcd/doctor.git"
+  },
+  "keywords": [
+    "event",
+    "sourcing",
+    "paradox",
+    "time",
+    "events"
+  ],
+  "author": "",
+  "license": "GPL-3.0",
+  "bugs": {
+    "url": "https://github.com/nxcd/doctor/issues"
+  },
+  "homepage": "https://github.com/nxcd/doctor#readme",
+  "dependencies": {
+    "@nxcd/paradox": "^2.10.1",
+    "caporal": "^1.1.0",
+    "chalk": "^2.4.2",
+    "mongodb": "^3.1.13"
+  },
+  "devDependencies": {
+    "@types/mongodb": "^3.1.19",
+    "@types/node": "^10.12.21"
+  }
+}
