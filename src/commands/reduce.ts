@@ -3,6 +3,7 @@ import caporal from 'caporal'
 import { IEvent } from '@nxcd/tardis'
 import { CommandError } from './errors/CommandError'
 import { ICommand } from '../structures/interfaces/ICommand'
+import { UnknownEntityError } from './errors/UnknownEntityError'
 
 const TIME_PARSE_FORMAT = 'YYYY-MM-DD.HH:mm'
 const TIME_DISPLAY_FORMAT = 'DD/MM/YYYY HH:mm'
@@ -54,22 +55,27 @@ const command: ICommand = {
   ],
   options: [
     {
-      name: '-i, --ignore',
+      name: '-i, --ignore <ignore>',
       description: 'Name(s) or ID(s) of events to ignore',
-      flag: caporal.REPEATABLE
+      validator: caporal.REPEATABLE
     },
     {
-      name: '-u, --until',
+      name: '-u, --until <until>',
       description: `Ignore any events after this date (${TIME_PARSE_FORMAT})`
+    },
+    {
+      name: '-s, --save',
+      description: 'Save results to database',
+      validator: caporal.BOOLEAN
     }
   ],
   async handler (config, args, options, logger) {
     logger.debug(`Received options: ${JSON.stringify(options)}`)
 
-    const { entity: Entity, repository } = config.entities[ args.entity ]
+    const { entity: Entity = null, repository = null } = config.entities[ args.entity ] || {}
 
     if (!Entity || !repository) {
-      throw new CommandError(`Unknown entity "${args.entity}"`)
+      throw new UnknownEntityError(args.entity)
     }
 
     logger.debug(`Found entity config for ${args.entity}`)
@@ -97,7 +103,9 @@ const command: ICommand = {
 
     const newEntity = new Entity().setPersistedEvents(events)
 
-    return JSON.stringify(newEntity.state, null, 4)
+    console.log(JSON.stringify(newEntity.state, null, 4))
+
+    return 'Entity was reduced!'
   }
 }
 

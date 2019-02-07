@@ -12,6 +12,7 @@ import { CommandError } from './commands/errors/CommandError'
 import { IDoctorConfig } from './structures/interfaces/IDoctorConfig'
 import { GenericRepository } from './data/repositories/GenericRepository'
 import { IBuiltDoctorConfig } from './structures/interfaces/IBuiltDoctorConfig'
+import { UnknownEntityError } from './commands/errors/UnknownEntityError';
 
 caporal.version(pkg.version)
   .command(check.name, check.description)
@@ -46,7 +47,7 @@ async function setup () {
   for (const command of commands) {
     const prog = caporal.command(command.name, command.description)
 
-    prog.option('-f, --file', 'Config file to override default')
+    prog.option('-f, --file <file>', 'Config file to override default', caporal.STRING, './doctor.config.js')
 
     if (command.arguments && command.arguments.length) {
       for (const argument of command.arguments) {
@@ -56,7 +57,7 @@ async function setup () {
 
     if (command.options && command.options.length) {
       for (const option of command.options) {
-        prog.option(option.name, option.description, option.flag)
+        prog.option(option.name, option.description, option.validator)
       }
     }
 
@@ -75,6 +76,14 @@ async function setup () {
         })
         .catch(err => {
           spinner.fail('Uh oh...')
+
+          if (err instanceof UnknownEntityError) {
+            console.error(err.message)
+            console.error('Registered entities:\n')
+            console.error(Object.keys(config.entities).map(name => ` - ${name}`).join('\n'))
+            process.exit(1)
+          }
+
           const text = err instanceof CommandError
             ? err.message
             : err

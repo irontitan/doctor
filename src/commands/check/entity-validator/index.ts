@@ -4,17 +4,12 @@ import validateCollection from './collection'
 import validateRepository from './repository'
 import { IEntityConfig } from '../../../structures/interfaces/IDoctorConfig'
 
-function validate (entityConfig: IEntityConfig, mongodbConnection: Db, logger: Logger) {
-  const results = [
-    `    ${validateEntity(entityConfig, logger)}`,
-    `    ${validateCollection(entityConfig, logger)}`
-  ]
+async function validate (entityConfig: IEntityConfig, mongodbConnection: Db, logger: Logger) {
+  const entity = await validateEntity(entityConfig, logger)
+  const collection = await validateCollection(entityConfig, mongodbConnection, logger)
+  const repository = await validateRepository(entityConfig, mongodbConnection, logger)
 
-  if (entityConfig.repository) {
-    results.push(`    ${validateRepository(entityConfig, mongodbConnection, logger)}`)
-  }
-
-  return results
+  return entity && collection && repository
 }
 
 export default { validate }

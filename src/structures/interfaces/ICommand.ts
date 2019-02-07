@@ -8,7 +8,8 @@ export interface IArgument {
 export interface IOption {
   name: string,
   description: string,
-  flag?: any
+  validator?: any,
+  default?: any
 }
 
 export interface IMongoCommandHandler {
