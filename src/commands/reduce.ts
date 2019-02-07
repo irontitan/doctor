@@ -1,12 +1,24 @@
+import ora from 'ora'
+import chalk from 'chalk'
 import moment from 'moment'
 import caporal from 'caporal'
+import inquirer from 'inquirer'
+import prettyjson from 'prettyjson'
 import { IEvent } from '@nxcd/tardis'
 import { CommandError } from './errors/CommandError'
+import { EventEntity, EventRepository } from '@nxcd/paradox'
 import { ICommand } from '../structures/interfaces/ICommand'
 import { UnknownEntityError } from './errors/UnknownEntityError'
+import { IEntityConstructor } from '@nxcd/paradox/dist/interfaces/IEntityConstructor';
 
 const TIME_PARSE_FORMAT = 'YYYY-MM-DD.HH:mm'
 const TIME_DISPLAY_FORMAT = 'DD/MM/YYYY HH:mm'
+
+async function sleep (timeout: number) {
+  return new Promise((resolve) => {
+    setTimeout(() => { resolve() }, timeout)
+  })
+}
 
 const ignore = (ignored: string[], logger: Logger) => function (event: IEvent<any>): Boolean {
   const result = Array.isArray(ignored)
@@ -40,6 +52,45 @@ function getId (event: IEvent<any>) {
   return event.id
 }
 
+async function reduceEntity (args: {[key: string]: any}, options: {[key: string]: any}, logger: Logger, Entity: IEntityConstructor<EventEntity<any>>, pretty: (value: any) => string, repository: EventRepository<EventEntity<any>>) {
+  const document = await repository.findById(args.id)
+
+  if (!document) {
+    throw new CommandError(`${args.entity} "${args.id}" was not found`)
+  }
+
+  if (!options.ignore && !options.until) {
+    return document
+  }
+
+  const ignored = options.until
+    ? document.persistedEvents.filter(keepUntil(options.until, logger)).map(getId)
+    : options.ignore
+
+  logger.debug('Filtering ignored event(s)')
+
+  const events = document.persistedEvents.filter(ignore(ignored, logger))
+
+  logger.debug(`Ignored ${document.persistedEvents.length - events.length} event(s)`)
+  logger.debug(`Events array: ${pretty(events)}`)
+
+  const newEntity: EventEntity<any> = new Entity().setPersistedEvents(events)
+
+  return newEntity
+}
+
+function formatEvent (event: IEvent<EventEntity<any>>) {
+  if (event.data.id && event.data.id.toHexString) {
+    event.data.id = event.data.id.toHexString()
+  }
+
+  return {
+    ...event,
+    timestamp: moment(event.timestamp).utc().format('DD/MM/YYYY HH:mm:ss'),
+    name: chalk.blue(event.name)
+  }
+}
+
 const command: ICommand = {
   name: 'reduce',
   description: 'Reduces an entity and does something with its state',
@@ -67,10 +118,21 @@ const command: ICommand = {
       name: '-s, --save',
       description: 'Save results to database',
       validator: caporal.BOOLEAN
+    },
+    {
+      name: '-j, --json',
+      description: 'Print valid JSON results',
+      validator: caporal.BOOLEAN
     }
   ],
   async handler (config, args, options, logger) {
-    logger.debug(`Received options: ${JSON.stringify(options)}`)
+    const pretty = options.json
+      ? (value: any) => JSON.stringify(value, null, 4)
+      : prettyjson.render
+
+    const spinner = ora('Manipulating space and time... Please, hold on.').start()
+    logger.debug(`\nReceived options: ${pretty(options)}`)
+    logger.debug(`Received arguments: ${pretty(args)}`)
 
     const { entity: Entity = null, repository = null } = config.entities[ args.entity ] || {}
 
@@ -80,32 +142,45 @@ const command: ICommand = {
 
     logger.debug(`Found entity config for ${args.entity}`)
 
-    const document = await repository.findById(args.id)
+    spinner.text = 'Reducing entity'
+    const document = await reduceEntity(args, options, logger, Entity, pretty, repository)
+    spinner.succeed('Done')
 
-    if (!document) {
-      throw new CommandError(`${args.entity} "${args.id}" was not found`)
+    const stringId = document.state.id && document.state.id.toHexString
+      ? document.state.id.toHexString()
+      : document.state.id
+
+    const stateString = pretty({ ...document.state, id: stringId})
+
+    if (!options.save) {
+      return stateString
     }
 
-    if (!options.ignore && !options.until) {
-      return JSON.stringify(document.state, null, 4)
+    console.log(chalk.blue('Resulting state:'))
+    console.log(stateString)
+
+    console.log('\Resulting events array:')
+    console.log(pretty(document.persistedEvents.map(formatEvent)))
+
+    const { proceed } = await inquirer.prompt([
+      {
+        type: 'confirm',
+        name: 'proceed',
+        message: `Would you like to save these results to the database? ${chalk.bold.red('THIS CANNOT BE UNDONE')}`,
+        default: false
+      }
+    ])
+
+    if (proceed) {
+      spinner.text = 'Saving results to database'
+      spinner.start()
+      await sleep(10000)
+      spinner.succeed('Done :D')
+      return
     }
 
-    const ignored = options.until
-      ? document.persistedEvents.filter(keepUntil(options.until, logger)).map(getId)
-      : options.ignore
-
-    logger.debug('Filtering ignored event(s)')
-
-    const events = document.persistedEvents.filter(ignore(ignored, logger))
-
-    logger.debug(`Ignored ${document.persistedEvents.length - events.length} event(s)`)
-    logger.debug(`Events array: ${JSON.stringify(events)}`)
-
-    const newEntity = new Entity().setPersistedEvents(events)
-
-    console.log(JSON.stringify(newEntity.state, null, 4))
-
-    return 'Entity was reduced!'
+    spinner.info('Done. Nothing was persisted')
+    return
   }
 }
 

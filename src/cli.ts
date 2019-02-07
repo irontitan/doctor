@@ -1,6 +1,5 @@
 #!/usr/bin/env node
 
-import ora from 'ora'
 import path from 'path'
 import chalk from 'chalk'
 import caporal from 'caporal'
@@ -12,7 +11,7 @@ import { CommandError } from './commands/errors/CommandError'
 import { IDoctorConfig } from './structures/interfaces/IDoctorConfig'
 import { GenericRepository } from './data/repositories/GenericRepository'
 import { IBuiltDoctorConfig } from './structures/interfaces/IBuiltDoctorConfig'
-import { UnknownEntityError } from './commands/errors/UnknownEntityError';
+import { UnknownEntityError } from './commands/errors/UnknownEntityError'
 
 caporal.version(pkg.version)
   .command(check.name, check.description)
@@ -62,21 +61,16 @@ async function setup () {
     }
 
     prog.action(async (args, options, logger) => {
-      const spinner = ora({ spinner: 'clock', text: 'Manipulating space and time... Hold tight'}).start()
-
       const config = await buildConfig(options.file)
 
       await command.handler(config, args, options, logger)
         .then(result => {
           if (result) {
-            spinner.succeed('Done')
             console.log(result)
-            process.exit(0)
           }
+          process.exit(0)
         })
         .catch(err => {
-          spinner.fail('Uh oh...')
-
           if (err instanceof UnknownEntityError) {
             console.error(err.message)
             console.error('Registered entities:\n')

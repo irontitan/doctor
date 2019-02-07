@@ -14,7 +14,7 @@ const eventEntityProof = [
 ]
 
 export default function ({ entity }: IEntityConfig, logger: Logger) {
-  const spinner = ora({ spinner: 'clock', text: 'Entity' }).start()
+  const spinner = ora('Entity').start()
   const entityInstance = new entity()
 
   const isValid = eventEntityProof.reduce((result, proof) => {

@@ -3,7 +3,7 @@ import { Db } from 'mongodb'
 import { IEntityConfig } from '../../../structures/interfaces/IDoctorConfig'
 
 export default function ({ repository }: IEntityConfig, mongodbConnection: Db, _logger: Logger) {
-  const spinner = ora({ spinner: 'clock', text: 'Repository' }).start()
+  const spinner = ora('Repository').start()
 
   if (!repository) {
     spinner.info('Repository: No custom repository provided. Using generic one')

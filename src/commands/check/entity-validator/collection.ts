@@ -3,7 +3,7 @@ import { Db } from 'mongodb'
 import { IEntityConfig } from '../../../structures/interfaces/IDoctorConfig'
 
 export default async function ({ collection }: IEntityConfig, mongodbConnection: Db, _logger: Logger) {
-  const spinner = ora({ spinner: 'clock', text: 'Collection' }).start()
+  const spinner = ora('Collection').start()
 
   const collections = await mongodbConnection.listCollections(undefined, { nameOnly: true }).toArray()
     .then(collections => collections.map(({ name }) => name))
