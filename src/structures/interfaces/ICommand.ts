@@ -17,7 +17,7 @@ export interface IMongoCommandHandler {
     args: { [k: string]: any },
     options: { [k: string]: any },
     logger: Logger
-  ): void;
+  ): Promise<string | void>;
 }
 
 export interface ICommand {

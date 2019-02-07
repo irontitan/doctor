@@ -1,15 +1,17 @@
 #!/usr/bin/env node
 
+import ora from 'ora'
 import path from 'path'
+import chalk from 'chalk'
 import caporal from 'caporal'
 import check from './commands/check'
 import { commands } from './commands'
 const pkg = require('../package.json')
 import mongodb from './data/connections/mongodb'
+import { CommandError } from './commands/errors/CommandError'
 import { IDoctorConfig } from './structures/interfaces/IDoctorConfig'
+import { GenericRepository } from './data/repositories/GenericRepository'
 import { IBuiltDoctorConfig } from './structures/interfaces/IBuiltDoctorConfig'
-import { GenericRepository } from './data/repositories/GenericRepository';
-
 
 caporal.version(pkg.version)
   .command(check.name, check.description)
@@ -40,8 +42,6 @@ async function buildConfig (fileName?: string): Promise<IBuiltDoctorConfig> {
   return config
 }
 
-
-
 async function setup () {
   for (const command of commands) {
     const prog = caporal.command(command.name, command.description)
@@ -61,11 +61,27 @@ async function setup () {
     }
 
     prog.action(async (args, options, logger) => {
+      const spinner = ora({ spinner: 'clock', text: 'Manipulating space and time... Hold tight'}).start()
+
       const config = await buildConfig(options.file)
 
       await command.handler(config, args, options, logger)
+        .then(result => {
+          if (result) {
+            spinner.succeed('Done')
+            console.log(result)
+            process.exit(0)
+          }
+        })
+        .catch(err => {
+          spinner.fail('Uh oh...')
+          const text = err instanceof CommandError
+            ? err.message
+            : err
 
-      process.exit(0)
+          console.error(chalk.red(text))
+          process.exit(1)
+        })
     })
   }
 }

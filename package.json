@@ -29,10 +29,13 @@
     "@nxcd/paradox": "^2.10.1",
     "caporal": "^1.1.0",
     "chalk": "^2.4.2",
-    "mongodb": "^3.1.13"
+    "moment": "^2.24.0",
+    "mongodb": "^3.1.13",
+    "ora": "^3.0.0"
   },
   "devDependencies": {
     "@types/mongodb": "^3.1.19",
-    "@types/node": "^10.12.21"
+    "@types/node": "^10.12.21",
+    "@types/ora": "^3.0.0"
   }
 }
