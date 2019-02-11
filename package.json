@@ -1,12 +1,14 @@
 {
   "name": "@nxcd/doctor",
   "version": "1.0.0",
-  "description": "Toolm to operate @nxcd/paradox and help with controling time",
+  "description": "Tool to operate @nxcd/paradox and help with controling time",
   "bin": {
     "doctor": "dist/cli.js"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "clean": "rm -rf dist",
+    "build": "tsc",
+    "build:clean": "pnpm run clean && pnpm run build"
   },
   "repository": {
     "type": "git",
@@ -41,5 +43,8 @@
     "@types/node": "^10.12.21",
     "@types/ora": "^3.0.0",
     "@types/prettyjson": "^0.0.28"
-  }
+  },
+  "files": [
+    "dist/**/*"
+  ]
 }
