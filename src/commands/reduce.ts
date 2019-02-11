@@ -9,16 +9,10 @@ import { CommandError } from './errors/CommandError'
 import { EventEntity, EventRepository } from '@nxcd/paradox'
 import { ICommand } from '../structures/interfaces/ICommand'
 import { UnknownEntityError } from './errors/UnknownEntityError'
-import { IEntityConstructor } from '@nxcd/paradox/dist/interfaces/IEntityConstructor';
+import { IEntityConstructor } from '@nxcd/paradox/dist/interfaces/IEntityConstructor'
 
 const TIME_PARSE_FORMAT = 'YYYY-MM-DD.HH:mm'
 const TIME_DISPLAY_FORMAT = 'DD/MM/YYYY HH:mm'
-
-async function sleep (timeout: number) {
-  return new Promise((resolve) => {
-    setTimeout(() => { resolve() }, timeout)
-  })
-}
 
 const ignore = (ignored: string[], logger: Logger) => function (event: IEvent<any>): Boolean {
   const result = Array.isArray(ignored)
@@ -144,7 +138,7 @@ const command: ICommand = {
 
     spinner.text = 'Reducing entity'
     const document = await reduceEntity(args, options, logger, Entity, pretty, repository)
-    spinner.succeed('Done')
+    spinner.stop()
 
     const stringId = document.state.id && document.state.id.toHexString
       ? document.state.id.toHexString()
@@ -156,11 +150,11 @@ const command: ICommand = {
       return stateString
     }
 
-    console.log(chalk.blue('Resulting state:'))
-    console.log(stateString)
-
-    console.log('\Resulting events array:')
-    console.log(pretty(document.persistedEvents.map(formatEvent)))
+    console.error(chalk.blue('Resulting state:'))
+    console.error(stateString)
+    console.error('\n\n')
+    console.error(chalk.blue('\Resulting events array:'))
+    console.error(pretty(document.persistedEvents.map(formatEvent)))
 
     const { proceed } = await inquirer.prompt([
       {
@@ -173,9 +167,9 @@ const command: ICommand = {
 
     if (proceed) {
       spinner.text = 'Saving results to database'
-      spinner.start()
-      await sleep(10000)
-      spinner.succeed('Done :D')
+      // spinner.start()
+      await repository.save(document, true)
+      // spinner.succeed('Done. Result saved to the database')
       return
     }
 
