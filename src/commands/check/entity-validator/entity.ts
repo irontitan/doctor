@@ -1,8 +1,5 @@
-import chalk from 'chalk'
+import ora from 'ora'
 import { IEntityConfig } from '../../../structures/interfaces/IDoctorConfig'
-
-const fail = chalk.red
-const succeed = chalk.green
 
 const eventEntityProof = [
   'persistedEvents',
@@ -17,6 +14,7 @@ const eventEntityProof = [
 ]
 
 export default function ({ entity }: IEntityConfig, logger: Logger) {
+  const spinner = ora('Entity').start()
   const entityInstance = new entity()
 
   const isValid = eventEntityProof.reduce((result, proof) => {
@@ -29,7 +27,11 @@ export default function ({ entity }: IEntityConfig, logger: Logger) {
       : false
   }, true)
 
-  return isValid
-    ? succeed('Entity: OK')
-    : fail('Entity: Failed - Entity is not an EventEntity')
+  if (isValid) {
+    spinner.succeed('Entity')
+    return true
+  }
+
+  spinner.fail('Entity: Entity is not an EventEntity')
+  return false
 }

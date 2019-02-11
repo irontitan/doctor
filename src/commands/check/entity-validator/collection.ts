@@ -1,11 +1,18 @@
-import chalk from 'chalk'
+import ora from 'ora'
+import { Db } from 'mongodb'
 import { IEntityConfig } from '../../../structures/interfaces/IDoctorConfig'
 
-const fail = chalk.red
-const succeed = chalk.green
+export default async function ({ collection }: IEntityConfig, mongodbConnection: Db, _logger: Logger) {
+  const spinner = ora('Collection').start()
 
-export default function ({ collection }: IEntityConfig, _logger: Logger) {
-  return collection
-    ? succeed('Collection: OK')
-    : fail('Collection: Failed - No collection provided')
+  const collections = await mongodbConnection.listCollections(undefined, { nameOnly: true }).toArray()
+    .then(collections => collections.map(({ name }) => name))
+
+  if (!collections.includes(collection)) {
+    spinner.fail('Collection: Provided collection does not exist')
+    return false
+  }
+
+  spinner.succeed('Collection')
+  return true
 }

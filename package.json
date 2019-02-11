@@ -26,16 +26,20 @@
   },
   "homepage": "https://github.com/nxcd/doctor#readme",
   "dependencies": {
-    "@nxcd/paradox": "^2.10.1",
+    "@nxcd/paradox": "^2.11.2",
     "caporal": "^1.1.0",
     "chalk": "^2.4.2",
+    "inquirer": "^6.2.2",
     "moment": "^2.24.0",
     "mongodb": "^3.1.13",
-    "ora": "^3.0.0"
+    "ora": "^3.0.0",
+    "prettyjson": "^1.2.1"
   },
   "devDependencies": {
+    "@types/inquirer": "^0.0.43",
     "@types/mongodb": "^3.1.19",
     "@types/node": "^10.12.21",
-    "@types/ora": "^3.0.0"
+    "@types/ora": "^3.0.0",
+    "@types/prettyjson": "^0.0.28"
   }
 }

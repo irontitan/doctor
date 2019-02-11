@@ -1,18 +1,22 @@
-import chalk from 'chalk'
+import ora from 'ora'
 import { Db } from 'mongodb'
 import { IEntityConfig } from '../../../structures/interfaces/IDoctorConfig'
 
-const fail = chalk.red
-const succeed = chalk.green
-
 export default function ({ repository }: IEntityConfig, mongodbConnection: Db, _logger: Logger) {
-  if (!repository) throw new Error('repository is undefined. This should never have been called')
+  const spinner = ora('Repository').start()
+
+  if (!repository) {
+    spinner.info('Repository: No custom repository provided. Using generic one')
+    return true
+  }
 
   const repositoryInstance = repository(mongodbConnection)
 
   if (!repositoryInstance.save || !repositoryInstance.findById) {
-    return fail('Repository: Fail - Returned value does not seem to be an EventRepositoru')
+    spinner.fail('Repository: Returned value does not seem to be an EventRepository')
+    return false
   }
 
-  return succeed('Repository: OK')
+  spinner.succeed('Repository')
+  return true
 }

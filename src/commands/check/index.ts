@@ -14,7 +14,7 @@ async function exists (fileName: string) {
       resolve(true)
     })
   })
-}
+ }
 
 const command = {
   name: 'check',
@@ -36,20 +36,31 @@ const command = {
       return logger.error(fail('[fatal] No mongodb connection configuration provided'))
     }
 
+    console.error('Begginning entity validation\n')
+
     const mongodbConnection = await mongodb.createConnection(config.mongodb)
 
-    console.log('Begginning entity validation\n')
+    let hasInvalidEntity = false
 
     for (const [entityName, entity] of Object.entries(config.entities)) {
-      const text = [
-        chalk.cyan(`  ${entityName}:`),
-        ...entityValidator.validate(entity, mongodbConnection, logger)
-      ]
+      console.log(chalk.cyan.bold(entityName))
 
-      console.log(text.join('\n'))
+      const isEntityValid = await entityValidator.validate(entity, mongodbConnection, logger)
 
-      process.exit(0)
+      if (!isEntityValid) {
+        hasInvalidEntity = true
+      }
+
+      console.log('')
     }
+
+    const text = hasInvalidEntity
+      ? chalk.red("Uh... You'll need to fix that before we can travel through time")
+      : chalk.green("Great! We're good to go :D")
+
+    console.error(text)
+
+    process.exit(hasInvalidEntity ? 1 : 0)
   }
 }
 
