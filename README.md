@@ -1,8 +1,8 @@
 Doctor
 ===
+![stability-unstable](https://img.shields.io/badge/stability-unstable-yellow.svg)
 
 Simple yet useful library to avoid manually manipulating event sourcing databases and [paradox](https://github.com/nxcd/paradox) / [tardis](https://github.com/nxcd/tardis) events and entities.
-
 - [Doctor](#doctor)
   - [Installation](#installation)
   - [Usage](#usage)
@@ -191,6 +191,7 @@ All [global params](#global-params) are supported
 
 ### TODO
 
+- [ ] Write tests
 - [ ] Add ability to reduce multiple entities and even collections at once
 - [ ] Add ability to use custom script to manipulate entities
 - [ ] Make mongodb connection not required
