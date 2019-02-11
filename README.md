@@ -1,6 +1,6 @@
 Doctor
 ===
-![stability-unstable](https://img.shields.io/badge/stability-unstable-yellow.svg)
+![build-status](https://travis-ci.org/nxcd/doctor.svg?branch=master) ![stability-unstable](https://img.shields.io/badge/stability-unstable-yellow.svg)
 
 Simple yet useful library to avoid manually manipulating event sourcing databases and [paradox](https://github.com/nxcd/paradox) / [tardis](https://github.com/nxcd/tardis) events and entities.
 - [Doctor](#doctor)
