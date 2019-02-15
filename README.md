@@ -59,10 +59,11 @@ module.exports = {
     dbName: process.env.DATABASE_MONGODB_DBNAME
   },
   entities: {
-    'person': {
+    person: {
       entity: Person,
       collection: 'people',
       repository: (mongodbConnection) => new PersonRepository(mongodbConnection)
+    }
   }
 }
 ```
