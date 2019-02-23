@@ -6,40 +6,22 @@ import caporal from 'caporal'
 import check from './commands/check'
 import { commands } from './commands'
 const pkg = require('../package.json')
+import { DoctorConfig } from './DoctorConfig'
 import mongodb from './data/connections/mongodb'
 import { CommandError } from './commands/errors/CommandError'
 import { IDoctorConfig } from './structures/interfaces/IDoctorConfig'
-import { GenericRepository } from './data/repositories/GenericRepository'
-import { IBuiltDoctorConfig } from './structures/interfaces/IBuiltDoctorConfig'
 import { UnknownEntityError } from './commands/errors/UnknownEntityError'
 
 caporal.version(pkg.version)
   .command(check.name, check.description)
   .action(check.handler)
 
-async function buildConfig (fileName?: string): Promise<IBuiltDoctorConfig> {
+async function buildConfig (fileName?: string): Promise<DoctorConfig> {
   const rawConfig: IDoctorConfig = require(path.resolve(process.cwd(), fileName || './doctor.config.js'))
 
   const mongodbConnection = await mongodb.createConnection(rawConfig.mongodb)
 
-  const config: IBuiltDoctorConfig = {
-    mongodb: rawConfig.mongodb,
-    entities: {}
-  }
-
-  for (const [entityName, entityConfig] of Object.entries(rawConfig.entities)) {
-    const repository = entityConfig.repository
-      ? entityConfig.repository(mongodbConnection)
-      : new GenericRepository(mongodbConnection, entityConfig.entity, entityConfig.collection)
-
-    config.entities[entityName] = {
-      entity: entityConfig.entity,
-      collection: entityConfig.collection,
-      repository
-    }
-  }
-
-  return config
+  return new DoctorConfig(rawConfig, mongodbConnection)
 }
 
 async function setup () {
@@ -47,6 +29,7 @@ async function setup () {
     const prog = caporal.command(command.name, command.description)
 
     prog.option('-f, --file <file>', 'Config file to override default', caporal.STRING, './doctor.config.js')
+    prog.option('-v, --verbose', 'Verbose mode - will also output debug messages')
 
     if (command.arguments && command.arguments.length) {
       for (const argument of command.arguments) {
@@ -81,6 +64,11 @@ async function setup () {
           const text = err instanceof CommandError
             ? err.message
             : err
+
+          if (options.verbose) {
+            console.error(err)
+            process.exit(1)
+          }
 
           console.error(chalk.red(text))
           process.exit(1)
