@@ -26,6 +26,9 @@ Simple yet useful library to avoid manually manipulating event sourcing database
       - [`entitites`](#entitites)
         - [Usage](#usage-5)
         - [Params](#params-4)
+      - [`rebuild`](#rebuild)
+        - [Usage](#usage-6)
+        - [Params](#params-5)
     - [TODO](#todo)
     - [Contributing](#contributing)
 
@@ -188,12 +191,24 @@ doctor entities
 ##### Params
 All [global params](#global-params) are supported
 
+#### `rebuild`
+
+This command reduces and updates the states of a whole collection
+
+##### Usage
+```sh
+doctor rebuild <collection>
+```
+
+##### Params
+All [global params](#global-params) are supported
+
 ---
 
 ### TODO
 
 - [ ] Write tests
-- [ ] Add ability to reduce multiple entities and even collections at once
+- [X] Add ability to reduce multiple entities and even collections at once
 - [ ] Add ability to use custom script to manipulate entities
 - [ ] Make mongodb connection not required
 - [ ] Improve documentation about custom repositories
