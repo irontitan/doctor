@@ -8,8 +8,8 @@ export interface IEntityConstructor<Entity> {
 export interface IBuiltEntityConfig {
   idField?: string
   collection: string
-  entity: IEntityConstructor<any>
-  repository: EventRepository<EventEntity<any>>
+  entity: IEntityConstructor<EventEntity<unknown>>
+  repository: EventRepository<EventEntity<unknown>>
 }
 
 export interface IBuiltDoctorConfig {

@@ -1,4 +1,4 @@
-import { IBuiltDoctorConfig } from './IBuiltDoctorConfig'
+import { DoctorConfig } from '../../DoctorConfig'
 
 export interface IArgument {
   name: string,
@@ -14,7 +14,7 @@ export interface IOption {
 
 export interface IMongoCommandHandler {
   (
-    config: IBuiltDoctorConfig,
+    config: DoctorConfig,
     args: { [k: string]: any },
     options: { [k: string]: any },
     logger: Logger

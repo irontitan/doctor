@@ -7,12 +7,14 @@ dependencies:
   mongodb: 3.1.13
   ora: 3.0.0
   prettyjson: 1.2.1
+  progress: 2.0.3
 devDependencies:
   '@types/inquirer': 0.0.43
   '@types/mongodb': 3.1.19
   '@types/node': 10.12.21
   '@types/ora': 3.0.0
   '@types/prettyjson': 0.0.28
+  '@types/progress': 2.0.3
 packages:
   /@nxcd/paradox/2.11.2:
     dependencies:
@@ -67,6 +69,10 @@ packages:
     dev: false
     resolution:
       integrity: sha512-EKhb5NveQ3NlW5EV7B0VRtDKwUfVey8LuJRl9pp5iW0se87/ZqLjG0PMf2MCzPXAJYWZN5Ltg7pHIAf9/Dm1tQ==
+  /@types/node/10.12.27:
+    dev: true
+    resolution:
+      integrity: sha512-e9wgeY6gaY21on3ve0xAjgBVjGDWq/xUteK0ujsE53bUoxycMkqfnkUgMt6ffZtykZ5X12Mg3T7Pw4TRCObDKg==
   /@types/ora/3.0.0:
     dependencies:
       '@types/node': 10.12.21
@@ -77,6 +83,12 @@ packages:
     dev: true
     resolution:
       integrity: sha1-ExqJDe1kIbG1RfRRCkrqvG1GUnU=
+  /@types/progress/2.0.3:
+    dependencies:
+      '@types/node': 10.12.27
+    dev: true
+    resolution:
+      integrity: sha512-bPOsfCZ4tsTlKiBjBhKnM8jpY5nmIll166IPD58D92hR7G7kZDfx5iB9wGF4NfZrdKolebjeAr3GouYkSGoJ/A==
   /@types/rx-core-binding/4.0.4:
     dependencies:
       '@types/rx-core': 4.0.3
@@ -771,6 +783,12 @@ packages:
     dev: false
     resolution:
       integrity: sha512-MtEC1TqN0EU5nephaJ4rAtThHtC86dNN9qCuEhtshvpVBkAW5ZO7BASN9REnF9eoXGcRub+pFuKEpOHE+HbEMw==
+  /progress/2.0.3:
+    dev: false
+    engines:
+      node: '>=0.4.0'
+    resolution:
+      integrity: sha512-7PiHtLll5LdnKIMw100I+8xJXR5gW2QwWYkT6iJva0bXitZKa/XMrSbdmg3r2Xnaidz9Qumd0VPaMrZlF9V9sA==
   /readable-stream/2.3.6:
     dependencies:
       core-util-is: 1.0.2
@@ -1017,6 +1035,7 @@ specifiers:
   '@types/node': ^10.12.21
   '@types/ora': ^3.0.0
   '@types/prettyjson': ^0.0.28
+  '@types/progress': ^2.0.3
   caporal: ^1.1.0
   chalk: ^2.4.2
   inquirer: ^6.2.2
@@ -1024,3 +1043,4 @@ specifiers:
   mongodb: ^3.1.13
   ora: ^3.0.0
   prettyjson: ^1.2.1
+  progress: ^2.0.3

@@ -8,7 +8,7 @@ export interface IEntityConstructor<Entity> {
 export interface IEntityConfig {
   idField?: string
   collection: string
-  entity: IEntityConstructor<any>
+  entity: IEntityConstructor<EventEntity<unknown>>
   repository? (mongodbConnection: any): EventRepository<EventEntity<any>>
 }
 
