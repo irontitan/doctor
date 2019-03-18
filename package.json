@@ -1,6 +1,6 @@
 {
   "name": "@nxcd/doctor",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "Tool to operate @nxcd/paradox and help with controling time",
   "bin": {
     "doctor": "dist/cli.js"
