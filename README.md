@@ -125,6 +125,12 @@ All commands (except by `help`) accept the following params:
 
 #### `help`
 
+<details>
+<summary>asciicast</summary><p>
+
+[![doctor-help](assets/doctor-help.gif)](https://asciinema.org/a/234546)
+</p></details>
+
 Prints help about commands
 
 ##### Usage
@@ -137,6 +143,12 @@ doctor help [command]
 No params supported
 
 #### `reduce`
+
+<details>
+<summary>asciicast</summary><p>
+
+[![doctor-reduce](assets/doctor-reduce.gif)](https://asciinema.org/a/234548)
+</p></details>
 
 Reduces the events of a given entity and returns its resulting state.
 
@@ -155,6 +167,12 @@ All [global params](#global-params) are supported
 
 #### `check`
 
+<details>
+<summary>asciicast</summary><p>
+
+[![doctor-check](assets/doctor-check.gif)](https://asciinema.org/a/234549)
+</p></details>
+
 This command goes through you config file an tells you if it's ok and usable by doctor.
 
 ##### Usage
@@ -167,6 +185,12 @@ doctor check
 All global params are supported
 
 #### `diff`
+
+<details>
+<summary>asciicast</summary><p>
+
+[![doctor-diff](assets/doctor-diff.gif)](https://asciinema.org/a/234551)
+</p></details>
 
 This command calculates the time difference (in hours) between the first occurence of an event and the last occurence of another event.
 
@@ -181,6 +205,12 @@ All [global params](#global-params) are supported
 
 #### `entitites`
 
+<details>
+<summary>asciicast</summary><p>
+
+[![doctor-entities](assets/doctor-entities.gif)](https://asciinema.org/a/234552)
+</p></details>
+
 This command lists all entities described by the [config file](#configuration-file)
 
 ##### Usage
@@ -192,6 +222,12 @@ doctor entities
 All [global params](#global-params) are supported
 
 #### `rebuild`
+
+<details>
+<summary>asciicast</summary><p>
+
+[![doctor-rebuild](assets/doctor-rebuild.gif)](https://asciinema.org/a/234540)
+</p></details>
 
 This command reduces and updates the states of a whole collection
 
