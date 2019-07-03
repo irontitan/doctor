@@ -18,7 +18,7 @@ export default function ({ entity }: IEntityConfig, logger: Logger) {
   const entityInstance = new entity()
 
   const isValid = eventEntityProof.reduce((result, proof) => {
-    const exists = entityInstance[proof] !== undefined
+    const exists = (entityInstance as any)[proof] !== undefined
 
     logger.debug(`Checking if ${proof} exists: ${exists}`)
 
