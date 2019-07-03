@@ -1,5 +1,5 @@
 import IMongoParams from './IMongoParams'
-import { EventRepository, EventEntity, IEvent } from '@nxcd/paradox'
+import { EventRepository, EventEntity, IEvent } from '@irontitan/paradox'
 
 export interface IEntityConstructor<Entity> {
   new (events?: IEvent<any>[]): Entity;

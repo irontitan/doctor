@@ -37,7 +37,7 @@ Simple yet useful library to avoid manually manipulating event sourcing database
 The recommended way to install doctor is through npm:
 
 ```bash
-npm i -g @nxcd/doctor
+npm i -g @irontitan/doctor
 ```
 
 ## Usage

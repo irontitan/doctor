@@ -1,6 +1,6 @@
 import chalk from 'chalk'
 import ProgressBar from 'progress'
-import { IEvent } from '@nxcd/paradox'
+import { IEvent } from '@irontitan/paradox'
 import { Cursor, ObjectId } from 'mongodb'
 import { ICommand } from '../structures/interfaces/ICommand'
 import { UnknownEntityError } from './errors/UnknownEntityError'
