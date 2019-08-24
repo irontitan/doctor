@@ -24,6 +24,6 @@
     "esModuleInterop": true,
     "sourceRoot": "/src",
     "experimentalDecorators": true,
-    "emitDecoratorMetadata": true,
+    "emitDecoratorMetadata": true
   }
 }
