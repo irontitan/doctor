@@ -74,7 +74,7 @@ async function reduceEntity (args: {[key: string]: any}, options: {[key: string]
 }
 
 function formatEvent (event: IEvent<EventEntity<any>>) {
-  if (event.data.id && event.data.id.toHexString) {
+  if (event.data && event.data.id && event.data.id.toHexString) {
     event.data.id = event.data.id.toHexString()
   }
 
