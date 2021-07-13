@@ -1,6 +1,6 @@
 {
   "name": "@irontitan/doctor",
-  "version": "1.1.4",
+  "version": "1.1.5",
   "description": "Tool to operate @irontitan/paradox and help with controling time",
   "bin": {
     "doctor": "dist/cli.js"
