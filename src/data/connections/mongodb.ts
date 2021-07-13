@@ -6,7 +6,8 @@ import IMongoParams from '../../structures/interfaces/IMongoParams'
  */
 const defaults = {
   poolSize: 10,
-  useNewUrlParser: true
+  useNewUrlParser: true,
+  useUnifiedTopology: true
 }
 
 /**
